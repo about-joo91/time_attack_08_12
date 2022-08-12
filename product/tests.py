@@ -27,3 +27,5 @@ class TestProductView(APITestCase):
             json.dumps({}),
             content_type="application/json"
         )
+        result = response.json()
+        

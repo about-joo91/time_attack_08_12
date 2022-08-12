@@ -51,7 +51,6 @@ class User(AbstractBaseUser):
     password = models.CharField(max_length=128)
     fullname = models.CharField(max_length=20)
     join_date = models.DateTimeField(auto_now_add=True)
-    subscribe = models.ForeignKey('product.UserProduct', on_delete=models.SET_NULL, null=True)
 
     # is_active가 False일 경우 계정이 비활성화됨
     is_active = models.BooleanField(default=True)

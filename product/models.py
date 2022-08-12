@@ -14,3 +14,4 @@ class UserProduct(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     product = models.ForeignKey('Product', null=True , on_delete=models.SET_NULL)
+    user = models.ForeignKey('user.User', null=True , on_delete=models.SET_NULL)

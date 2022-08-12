@@ -8,8 +8,7 @@ from rest_framework.response import Response
 
 
 from .models import Product, UserProduct
-from .serializers import ProductSerializers
-from user.models import User
+from .serializers import ProductSerializers, UserProductSerializer
 
 
 class ProductView(APIView):
@@ -22,16 +21,14 @@ class ProductView(APIView):
 
     def post(self, request):
         try:
-            product_id =  int(self.request.query_params.get("product_id"))
             cur_user = request.user
-            cur_product = Product.objects.filter(id=product_id).get()
-            user_product = UserProduct.objects.create(
-                start_date = datetime.utcnow() + timedelta(days=1),
-                end_date = datetime.utcnow() + timedelta(days=366),
-                product = cur_product
-            )
-            cur_user.subscribe = user_product
-            cur_user.save()
+            request.data['user'] = cur_user.id
+            request.data['start_date'] = datetime.utcnow() + timedelta(days=1)
+            request.data['end_date'] = datetime.utcnow() + timedelta(days=366)
+            user_product_serializer = UserProductSerializer(data=request.data)
+            user_product_serializer.is_valid(raise_exception=True)
+            user_product_serializer.save()
+
             return Response(
                 {"detail": "구입이 완료 되었습니다."}, status= status.HTTP_200_OK
             )
